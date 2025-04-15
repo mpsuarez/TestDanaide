@@ -58,10 +58,9 @@ namespace TestDanaide.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("CartId");
 
-                    b.HasIndex("CartId", "ProductId")
-                        .IsUnique();
+                    b.HasIndex("ProductId");
 
                     b.ToTable("CartProducts");
                 });
@@ -118,7 +117,7 @@ namespace TestDanaide.Persistence.Migrations
                     b.HasOne("TestDanaide.Persistence.Entities.Cart", "Cart")
                         .WithMany("CartProducts")
                         .HasForeignKey("CartId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TestDanaide.Persistence.Entities.Product", "Product")

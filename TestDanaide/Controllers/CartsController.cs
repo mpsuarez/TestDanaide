@@ -74,9 +74,8 @@ namespace TestDanaide.Controllers
                     AddProductToCartResponse addProductToCartResponse = new AddProductToCartResponse
                     {
                         Id = result.Value.Id,
-                        Products = [.. result.Value.CartProducts.Select(x => new Product
+                        Products = [.. result.Value.CartProducts.Select(x => new AddProductToCartResponseProduct
                         {
-                            Id = x.ProductId,
                             Name = x.Product.Name,
                             Price = x.Product.Price,
                         })],
@@ -102,9 +101,8 @@ namespace TestDanaide.Controllers
                 {
                     DeleteProductFromCartResponse deleteProductFromCartResponse = new DeleteProductFromCartResponse
                     {
-                        Products = [.. result.Value.CartProducts.Select(x => new Product
+                        Products = [.. result.Value.CartProducts.Select(x => new DeleteProductFromCartResponseProduct
                         {
-                            Id = x.ProductId,
                             Name = x.Product.Name,
                             Price = x.Product.Price,
                         })],

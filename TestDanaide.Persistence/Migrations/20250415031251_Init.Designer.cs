@@ -12,8 +12,8 @@ using TestDanaide.Persistence;
 namespace TestDanaide.Persistence.Migrations
 {
     [DbContext(typeof(TestDanaideDbContext))]
-    [Migration("20250415024015_rollbacklastmigration")]
-    partial class rollbacklastmigration
+    [Migration("20250415031251_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

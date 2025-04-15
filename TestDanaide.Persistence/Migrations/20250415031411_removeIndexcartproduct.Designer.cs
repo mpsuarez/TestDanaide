@@ -12,8 +12,8 @@ using TestDanaide.Persistence;
 namespace TestDanaide.Persistence.Migrations
 {
     [DbContext(typeof(TestDanaideDbContext))]
-    [Migration("20250415023647_DNIUserRequiredandremoveindex")]
-    partial class DNIUserRequiredandremoveindex
+    [Migration("20250415031411_removeIndexcartproduct")]
+    partial class removeIndexcartproduct
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -112,13 +112,8 @@ namespace TestDanaide.Services
                 };
                 await _cartProductRepository.CreateCartProduct(cartId, productId);
 
-                // Calcula el precio total sin descuentos
-                decimal baseTotal = cart.Total + product.Price;
+                cart.Total = await CalculateNewTotal(cart);
 
-                // Aplica el descuento
-                decimal discount = CalculateDiscount(cart);
-
-                cart.Total = baseTotal - discount;
                 await _unitOfWork.CommitAsync();
                 return Result.Ok(cart);
             }
@@ -147,13 +142,9 @@ namespace TestDanaide.Services
                 {
                     return Result.Fail(new Error("Product not found in cart"));
                 }
-                cart.CartProducts.Remove(cartProduct);
-                // Calcula el precio total sin descuentos
-                decimal baseTotal = cart.Total - product.Price;
+                await _cartProductRepository.DeleteAsync(cartProduct.Id);
 
-                // Aplica el descuento
-                decimal discount = CalculateDiscount(cart);
-                cart.Total = baseTotal - discount;
+                cart.Total = await CalculateNewTotal(cart);
                 await _unitOfWork.CommitAsync();
                 return Result.Ok(cart);
             }
@@ -182,44 +173,36 @@ namespace TestDanaide.Services
             }
         }
 
-        private decimal CalculateDiscount(Cart cart)
+        private async Task<decimal> CalculateNewTotal(Cart cart)
         {
-            int productCount = cart.CartProducts.Count;
-            decimal discount = 0;
+            IList<CartProduct> cartProducts = await _cartProductRepository.GetCartProductsAndPricesAsync(cart.Id);
+            decimal cartProductsTotal = cartProducts.Sum(cp => cp.Product.Price);
 
-            if (productCount == 5)
+            if (cartProducts.Count == 5)
             {
-                discount = cart.Total * 0.2m;
+                return cartProductsTotal / 1.2m;
             }
 
-            else if (productCount > 10)
+            else if (cartProducts.Count > 10)
             {
                 switch (cart.Type)
                 {
                     case CartType.Common:
-                        discount = 200;
-                        break;
+                        return cartProductsTotal - 200;
                     case CartType.SpecialDate:
-                        discount = 500;
-                        break;
+                        return cartProductsTotal - 500;
                     case CartType.Vip:
                         var cheapestProduct = cart.CartProducts
                             .OrderBy(cp => cp.Product.Price)
-                            .FirstOrDefault();
+                            .First();
 
-                        if (cheapestProduct != null)
-                        {
-                            discount = cheapestProduct.Product.Price + 700;
-                        }
-                        else
-                        {
-                            discount = 700;
-                        }
-                        break;
+                        cartProductsTotal -= cheapestProduct.Product.Price;
+                        cartProductsTotal -= 700;
+
+                        return cartProductsTotal;
                 }
             }
-
-            return discount;
+            return cartProductsTotal;
         }
 
     }

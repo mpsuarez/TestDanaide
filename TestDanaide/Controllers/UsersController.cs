@@ -48,12 +48,16 @@ namespace TestDanaide.Controllers
             Result<IList<Product>> result = await _userService.GetMostExpensiveProductsBought(dni);
             if (result.IsSuccess)
             {
-                return Ok(result.Value.Select(p => new 
+
+                MostExpensiveProductsResponse mostExpensiveProductsResponse = new()
                 {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Price = p.Price
-                }));
+                     Products = [.. result.Value.Select(x => new MostExpensiveProductsResponseProduct() { 
+                         Name = x.Name,
+                         Price = x.Price
+                     })]
+                };
+
+                return Ok(mostExpensiveProductsResponse);
             }
             else
             {

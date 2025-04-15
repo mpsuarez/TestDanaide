@@ -12,8 +12,8 @@ using TestDanaide.Persistence;
 namespace TestDanaide.Persistence.Migrations
 {
     [DbContext(typeof(TestDanaideDbContext))]
-    [Migration("20250415005142_Init")]
-    partial class Init
+    [Migration("20250415034146_cart-cartproductcascade")]
+    partial class cartcartproductcascade
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,10 +61,9 @@ namespace TestDanaide.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("CartId");
 
-                    b.HasIndex("CartId", "ProductId")
-                        .IsUnique();
+                    b.HasIndex("ProductId");
 
                     b.ToTable("CartProducts");
                 });
@@ -121,7 +120,7 @@ namespace TestDanaide.Persistence.Migrations
                     b.HasOne("TestDanaide.Persistence.Entities.Cart", "Cart")
                         .WithMany("CartProducts")
                         .HasForeignKey("CartId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TestDanaide.Persistence.Entities.Product", "Product")

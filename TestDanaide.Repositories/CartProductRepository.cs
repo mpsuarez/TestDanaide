@@ -23,15 +23,15 @@ namespace TestDanaide.Repositories
         public async Task<CartProduct?> GetCartProductByCartIdAndProductIdAsync(Guid cartId, Guid productId)
         {
             return await _unitOfWork.Context.CartProducts
-                .SingleOrDefaultAsync(x => x.CartId == cartId && x.ProductId == productId);
+                .FirstOrDefaultAsync(x => x.CartId == cartId && x.ProductId == productId);
         }
 
         public async Task<IList<Product>> GetMostExpensiveProductsBought(User user)
         {
             return await _unitOfWork.Context.Products
                 .Where(p => p.CartProducts.Any(cp => cp.Cart.UserId == user.Id))
-                .Take(4)
                 .OrderByDescending(p => p.Price)
+                .Take(4)
                 .ToListAsync();
         }
 
@@ -45,6 +45,13 @@ namespace TestDanaide.Repositories
             await _unitOfWork.Context.CartProducts.AddAsync(cartProduct);
             await _unitOfWork.CommitAsync();
             return cartProduct;
+        }
+
+        public async Task<IList<CartProduct>> GetCartProductsAndPricesAsync(Guid cartId)
+        {
+            return await _unitOfWork.Context.CartProducts
+                .Where(cp => cp.CartId == cartId).Include(x => x.Product)
+                .ToListAsync();
         }
 
     }

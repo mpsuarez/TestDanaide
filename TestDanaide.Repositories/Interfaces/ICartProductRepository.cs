@@ -8,5 +8,6 @@ namespace TestDanaide.Repositories.Interfaces
         Task<CartProduct?> GetCartProductByCartIdAndProductIdAsync(Guid cartId, Guid productId);
         Task<IList<Product>> GetMostExpensiveProductsBought(User user);
         Task<CartProduct> CreateCartProduct(Guid cartId, Guid productId);
+        Task<IList<CartProduct>> GetCartProductsAndPricesAsync(Guid cartId);
     }
 }

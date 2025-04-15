@@ -41,12 +41,10 @@ namespace TestDanaide.Persistence
             {
                 entity.HasKey(x => x.Id);
 
-                entity.HasIndex(x => new { x.CartId, x.ProductId }).IsUnique();
-
                 entity.HasOne(x => x.Cart)
                     .WithMany(x => x.CartProducts)
                     .HasForeignKey(x => x.CartId)
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasOne(x => x.Product)
                     .WithMany(x => x.CartProducts)

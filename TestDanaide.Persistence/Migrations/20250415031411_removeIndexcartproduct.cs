@@ -5,7 +5,7 @@
 namespace TestDanaide.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class DNIUserRequiredandremoveindex : Migration
+    public partial class removeIndexcartproduct : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
