@@ -45,7 +45,7 @@ namespace TestDanaide.Controllers
         [HttpGet("MostExpensiveProducts/{dni}")]
         public async Task<IActionResult> GetMostExpensiveProductsByUserDNI(string dni)
         {
-            Result<List<Product>> result = await _userService.GetMostExpensiveProductsByUserDNI(dni);
+            Result<IList<Product>> result = await _userService.GetMostExpensiveProductsBought(dni);
             if (result.IsSuccess)
             {
                 return Ok(result.Value.Select(p => new 
