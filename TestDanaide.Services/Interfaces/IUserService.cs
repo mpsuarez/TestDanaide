@@ -8,7 +8,7 @@ namespace TestDanaide.Services.Interfaces
 
         Task<Result<User>> CreateUserAsync(string DNI);
 
-        Task<Result<List<Product>>> GetMostExpensiveProductsByUserDNI(string dni);
+        Task<Result<IList<Product>>> GetMostExpensiveProductsBought(string DNI);
 
     }
 }
